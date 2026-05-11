@@ -1,5 +1,6 @@
 import "server-only";
 
+import { isIP } from "node:net";
 import type { PoolConnection, RowDataPacket } from "mysql2/promise";
 
 import { getDatabasePool, hasDatabaseConfig } from "@/lib/db";
@@ -135,20 +136,85 @@ function assertVoucherActive(voucher: {
   }
 }
 
-function createClientIp(headers: Headers) {
-  const candidates = [
-    headers.get("cf-connecting-ip"),
-    headers.get("x-real-ip"),
-    headers.get("x-forwarded-for")
-  ];
+function normalizeIpCandidate(value: string) {
+  let candidate = value.trim();
+  if (!candidate || candidate.toLowerCase() === "unknown") return "";
 
-  for (const candidate of candidates) {
-    if (!candidate) continue;
-    const first = candidate.split(",")[0]?.trim();
-    if (first) return first;
+  candidate = candidate.replace(/^for=/i, "").replace(/^"|"$/g, "");
+
+  if (candidate.startsWith("::ffff:")) {
+    candidate = candidate.slice(7);
   }
 
-  return "0.0.0.0";
+  if (candidate.startsWith("[") && candidate.includes("]")) {
+    candidate = candidate.slice(1, candidate.indexOf("]"));
+  } else if (/^\d{1,3}(?:\.\d{1,3}){3}:\d+$/.test(candidate)) {
+    candidate = candidate.replace(/:\d+$/, "");
+  }
+
+  return isIP(candidate) ? candidate : "";
+}
+
+function isPrivateOrLoopbackIp(ip: string) {
+  if (ip === "::1" || ip === "0.0.0.0") return true;
+  if (ip.startsWith("127.")) return true;
+  if (ip.startsWith("10.")) return true;
+  if (ip.startsWith("192.168.")) return true;
+  if (ip.startsWith("169.254.")) return true;
+  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(ip)) return true;
+  if (/^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./.test(ip)) return true;
+  if (ip.startsWith("fc") || ip.startsWith("fd")) return true;
+  if (ip.startsWith("fe80:")) return true;
+  return false;
+}
+
+function getForwardedHeaderIps(headerValue: string) {
+  return headerValue
+    .split(",")
+    .flatMap((part) => part.split(";"))
+    .map((part) => part.trim())
+    .filter((part) => /^for=/i.test(part))
+    .map(normalizeIpCandidate)
+    .filter(Boolean);
+}
+
+function createClientIp(headers: Headers) {
+  const directHeaders = [
+    "cf-connecting-ip",
+    "true-client-ip",
+    "x-client-ip",
+    "x-real-ip",
+    "x-forwarded-for",
+    "x-cluster-client-ip",
+    "x-vercel-forwarded-for",
+    "fly-client-ip"
+  ];
+
+  const candidates: string[] = [];
+
+  for (const headerName of directHeaders) {
+    const headerValue = headers.get(headerName);
+    if (!headerValue) continue;
+
+    headerValue
+      .split(",")
+      .map(normalizeIpCandidate)
+      .filter(Boolean)
+      .forEach((candidate) => candidates.push(candidate));
+  }
+
+  const forwarded = headers.get("forwarded");
+  if (forwarded) {
+    getForwardedHeaderIps(forwarded).forEach((candidate) => candidates.push(candidate));
+  }
+
+  const firstPublicIp = candidates.find((candidate) => !isPrivateOrLoopbackIp(candidate));
+  if (firstPublicIp) {
+    return firstPublicIp;
+  }
+
+  const firstKnownIp = candidates.find(Boolean);
+  return firstKnownIp || "0.0.0.0";
 }
 
 async function generateUniqueCode(
