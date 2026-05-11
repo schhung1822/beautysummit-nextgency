@@ -185,6 +185,10 @@ function createClientIp(headers: Headers) {
     "x-client-ip",
     "x-real-ip",
     "x-forwarded-for",
+    "x-original-forwarded-for",
+    "forwarded-for",
+    "proxy-client-ip",
+    "wl-proxy-client-ip",
     "x-cluster-client-ip",
     "x-vercel-forwarded-for",
     "fly-client-ip"

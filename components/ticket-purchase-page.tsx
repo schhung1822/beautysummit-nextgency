@@ -88,9 +88,11 @@ export function TicketPurchasePage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [voucherLoading, setVoucherLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [currentQueryString, setCurrentQueryString] = useState("");
 
   useEffect(() => {
     const url = new URL(window.location.href);
+    setCurrentQueryString(url.search);
     const ref = url.searchParams.get("ref");
     if (ref) {
       setCookie("bs_ref", ref, 30);
@@ -147,9 +149,33 @@ export function TicketPurchasePage() {
     }));
   }
 
-  function openBackupLink(url: string) {
-    if (!url) return;
-    window.open(url, "_blank", "noopener,noreferrer");
+  function buildLinkWithCurrentQuery(targetUrl: string) {
+    if (!targetUrl) return "#";
+
+    try {
+      const url = new URL(
+        targetUrl,
+        typeof window !== "undefined" ? window.location.origin : undefined
+      );
+      const currentParams = new URLSearchParams(currentQueryString);
+      const keys = new Set<string>();
+
+      currentParams.forEach((_value, key) => {
+        keys.add(key);
+      });
+
+      keys.forEach((key) => {
+        url.searchParams.delete(key);
+      });
+
+      currentParams.forEach((value, key) => {
+        url.searchParams.append(key, value);
+      });
+
+      return url.toString();
+    } catch {
+      return targetUrl;
+    }
   }
 
   async function handleApplyVoucher() {
@@ -274,13 +300,20 @@ export function TicketPurchasePage() {
           <div className="bsp-backup-links">
             <a
               className="bsp-backup-link"
-              href="https://beautysummit.vn/dang-ky-mua-ve"
+              href={buildLinkWithCurrentQuery(
+                process.env.NEXT_PUBLIC_PRIMARY_LINK ||
+                  "https://beautysummit.vn/dang-ky-mua-ve"
+              )}
             >
               Link đăng ký chính
             </a>
             <a
               className="bsp-backup-link"
-              href="https://beautysummit.activate.vn/"
+              href={buildLinkWithCurrentQuery(
+                process.env.NEXT_PUBLIC_BACKUP_LINK_1 ||
+                  process.env.NEXT_PUBLIC_BACKUP_LINK_2 ||
+                  "https://beautysummit.activate.vn/"
+              )}
             >
               Link dự phòng 2
             </a>
