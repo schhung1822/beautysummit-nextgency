@@ -65,8 +65,16 @@ type OrderRow = RowDataPacket & {
   status: string;
 };
 
+const EXTERNAL_WEBHOOK_TIMEOUT_MS = Number(
+  process.env.BS_WEBHOOK_TIMEOUT_MS || 15000
+);
+
 function getBaseUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+}
+
+function normalizeExternalUrl(value?: string) {
+  return value?.trim().replace(/^"(.*)"$/, "$1") || "";
 }
 
 function toTicket(row: TicketRow): Ticket {
@@ -203,10 +211,7 @@ function buildOrderDetail(records: OrderRecord[]): OrderDetail {
 }
 
 async function sendRegisterWebhook(payload: Record<string, unknown>) {
-  const webhookUrl = process.env.BS_REGISTER_WEBHOOK_URL?.trim().replace(
-    /^"(.*)"$/,
-    "$1"
-  );
+  const webhookUrl = normalizeExternalUrl(process.env.BS_REGISTER_WEBHOOK_URL);
   if (!webhookUrl) {
     console.warn("Register webhook skipped: BS_REGISTER_WEBHOOK_URL is empty");
     return;
@@ -224,7 +229,7 @@ async function sendRegisterWebhook(payload: Record<string, unknown>) {
         "Content-Type": "application/json; charset=utf-8"
       },
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(EXTERNAL_WEBHOOK_TIMEOUT_MS)
     });
 
     const responseText = await response.text();
@@ -655,26 +660,52 @@ export async function checkPaymentStatus(
     };
   }
 
-  const checkPaymentUrl = process.env.BS_CHECK_PAYMENT_URL;
+  const checkPaymentUrl = normalizeExternalUrl(process.env.BS_CHECK_PAYMENT_URL);
   if (checkPaymentUrl) {
     try {
+      console.info("Checking payment status via external endpoint", {
+        checkPaymentUrl,
+        orderId: code
+      });
+
       const response = await fetch(checkPaymentUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ orderid: code }),
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(EXTERNAL_WEBHOOK_TIMEOUT_MS)
       });
 
-      if (response.ok) {
-        const payload = (await response.json()) as { status?: string };
-        if (payload.status === "paydone") {
-          return { status: "paydone" };
+      const responseText = await response.text();
+      if (!response.ok) {
+        console.error("Payment status proxy failed", {
+          checkPaymentUrl,
+          orderId: code,
+          status: response.status,
+          body: responseText
+        });
+      } else {
+        try {
+          const payload = JSON.parse(responseText) as { status?: string };
+          if (payload.status === "paydone") {
+            return { status: "paydone" };
+          }
+        } catch (error) {
+          console.error("Payment status proxy invalid JSON response", {
+            checkPaymentUrl,
+            orderId: code,
+            body: responseText,
+            error
+          });
         }
       }
     } catch (error) {
-      console.error("Payment status proxy failed", error);
+      console.error("Payment status proxy request error", {
+        checkPaymentUrl,
+        orderId: code,
+        error
+      });
     }
   }
 
