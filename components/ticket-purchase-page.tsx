@@ -10,7 +10,7 @@ import type {
   Ticket,
   ValidatedVoucher
 } from "@/lib/types";
-import { clamp, formatCurrency, getCookie, setCookie } from "@/lib/utils";
+import { clamp, fetchPublicIp, formatCurrency, getCookie, setCookie } from "@/lib/utils";
 
 const initialForm: PurchaseForm = {
   name: "",
@@ -245,10 +245,10 @@ export function TicketPurchasePage() {
       return;
     }
 
-    const url = new URL(window.location.href);
     setSubmitLoading(true);
 
     try {
+      const clientIp = await fetchPublicIp();
       const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
@@ -259,12 +259,13 @@ export function TicketPurchasePage() {
           voucherCode: voucher?.voucher || "",
           tickets: selectedTickets,
           source: window.location.href,
-          ref: getCookie("bs_ref"),
-          utmSource: url.searchParams.get("utm_source") || "",
-          utmMedium: url.searchParams.get("utm_medium") || "",
-          utmCampaign: url.searchParams.get("utm_campaign") || "",
+          ref: "nextgency",
+          utmSource: "nextgency",
+          utmMedium: "nextgency",
+          utmCampaign: "nextgency",
           fbp: getCookie("_fbp"),
-          fbc: getCookie("_fbc") || url.searchParams.get("fbclid") || ""
+          fbc: getCookie("_fbc") || new URL(window.location.href).searchParams.get("fbclid") || "",
+          clientIp
         })
       });
 

@@ -1,7 +1,5 @@
-import { TicketPurchasePage } from "@/components/ticket-purchase-page";
-
-export const dynamic = "force-dynamic";
+import { BeautySummitLadipage } from "@/components/beauty-summit-ladipage";
 
 export default function HomePage() {
-  return <TicketPurchasePage />;
+  return <BeautySummitLadipage />;
 }

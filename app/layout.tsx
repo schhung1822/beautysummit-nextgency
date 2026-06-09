@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Beauty Summit 2026 - Đặt vé chính thức",
-  description: "Đặt mua vé Beauty Summit 2026 - Sự kiện làm đẹp hàng đầu Việt Nam. Nhanh tay sở hữu vé để trải nghiệm những xu hướng và bí quyết làm đẹp mới nhất từ các chuyên gia hàng đầu trong ngành."
+  title: "Beauty Summit 2026 - Landing Page",
+  description:
+    "Landing page Beauty Summit 2026 voi bo cuc su kien, quyen loi ve, dac quyen, timeline va thong tin lien he."
 };
 
 export default function RootLayout({

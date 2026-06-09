@@ -35,6 +35,20 @@ export function setCookie(name: string, value: string, days: number) {
   )};expires=${expires.toUTCString()};path=/`;
 }
 
+export async function fetchPublicIp() {
+  if (typeof window === "undefined") return "";
+
+  try {
+    const response = await fetch("https://api.ipify.org?format=json", {
+      cache: "no-store"
+    });
+    const payload = (await response.json()) as { ip?: string };
+    return payload.ip?.trim() || "";
+  } catch {
+    return "";
+  }
+}
+
 export function getVietnamNowString() {
   const parts = new Intl.DateTimeFormat("sv-SE", {
     timeZone: "Asia/Ho_Chi_Minh",

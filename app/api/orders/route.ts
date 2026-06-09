@@ -9,13 +9,13 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Omit<
       CreateOrderInput,
-      "userAgent" | "clientIp"
+      "userAgent"
     >;
     const meta = buildRequestMeta(request.headers);
     const data = await createOrder({
       ...body,
       userAgent: meta.userAgent,
-      clientIp: meta.clientIp
+      clientIp: body.clientIp?.trim() || meta.clientIp
     });
 
     return NextResponse.json({

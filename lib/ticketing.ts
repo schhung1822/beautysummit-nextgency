@@ -407,10 +407,11 @@ export async function createOrder(input: CreateOrderInput): Promise<CreatedOrder
   const hope = input.hope.trim();
   const voucherCode = input.voucherCode?.trim() || "";
   const source = input.source?.trim() || "";
-  const ref = input.ref?.trim() || "";
-  const utmSource = input.utmSource?.trim() || "";
-  const utmMedium = input.utmMedium?.trim() || "";
-  const utmCampaign = input.utmCampaign?.trim() || "";
+  const trackingValue = "nextgency";
+  const ref = trackingValue;
+  const utmSource = trackingValue;
+  const utmMedium = trackingValue;
+  const utmCampaign = trackingValue;
   const fbp = input.fbp?.trim() || "";
   const fbc = input.fbc?.trim() || "";
   const userAgent = input.userAgent?.trim() || "";
