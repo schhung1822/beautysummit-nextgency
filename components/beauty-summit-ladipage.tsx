@@ -57,11 +57,13 @@ const benefitRows = [
   ["Cơ hội nhận quà tặng, voucher lên tới 30% từ hơn 200 brand chính hãng", true, true, true, true],
   ["Tham gia các hoạt động sân khấu theo lịch BTC", true, true, true, true],
   ["Voucher giảm 35% khi mua bộ cẩm nang kinh doanh ngành làm đẹp", true, true, false, false],
+  ["Bộ sách 6 CẨM NANG KINH DOANH THỰC CHIẾN CHO NGÀNH LÀM ĐẸP trị giá 1.200.000 VNĐ", false, false, true, true],
   ["Tham dự đồng thời hội thảo Da liễu và hội thảo Marketing", false, true, true, true],
   ["Quà tặng túi Tote phiên bản giới hạn từ BTC", false, false, true, true],
   ["Tạp chí xu hướng Beauty Summit 2026 phiên bản giới hạn", false, false, true, true],
-  ["Private Coaching 1:1 cùng chuyên gia theo slot giới hạn", false, false, true, true],
-  ["Luxury Gala Dinner và gặp gỡ đại sứ thương hiệu", false, false, false, true]
+  ["01 suất PRIVATE COACHING 1:1 theo slot giới hạn của BTC để trao đổi trực tiếp, nhận tư vấn cá nhân hoá từ chuyên gia.", false, false, true, true],
+  ["Tham dự HỘI THẢO chuyên đề 'Phát triển thị trường tiêu dùng trong nước đối với ngành hàng hóa mỹ phẩm', được hỗ trợ chuyên môn bởi Cục Quản lý và Phát triển thị trường trong nước, đơn vị tổ chức: Hoàng Tú Holdings.", false, false, false, true],
+  ["Tham gia LUXURY GALA DINNER, gặp gỡ trực tiếp ĐẠI SỨ THƯƠNG HIỆU KIM BUM – kết nối cùng dàn diễn giả, KOLS và CEO của nhiều thương hiệu danh tiếng.", false, false, false, true]
 ];
 
 const ticketCards = [
@@ -497,18 +499,18 @@ export function BeautySummitLadipage() {
 
       <section className={`${sectionShell} bg-white text-[#121018]`}>
         <div className="mx-auto mb-10 w-full max-w-[980px] text-center">
-          <p className="text-sm font-extrabold uppercase text-[#8b5cf6]">Hơn 1000 chủ spa/clinic đã đăng ký tham dự</p>
-          <h2 className="mt-2 text-[28px] font-black uppercase leading-[1.08] text-[#121018] sm:text-[40px] lg:text-[52px]">
+          <p className="text-sm font-extrabold uppercase text-[#211D51]">Hơn 1000 chủ spa/clinic đã đăng ký tham dự</p>
+          <h2 className="mt-2 bg-[linear-gradient(90deg,#5E2493,#F13550)] bg-clip-text text-[28px] font-black uppercase leading-[1.35] text-transparent sm:text-[40px] lg:text-[52px]">
             Họ đến vì điều gì?
           </h2>
         </div>
         <div className="mx-auto grid w-full max-w-[1220px] gap-8 lg:grid-cols-3">
           {benefits.map((item) => (
-            <article className="relative flex min-h-[190px] items-center justify-center rounded-[48px] border-2 border-[#17151e] bg-white px-8 pb-9 pt-12 text-center shadow-[0_18px_42px_rgba(20,16,32,0.06)]" key={item}>
-              <span className="absolute left-1/2 top-0 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-[#17151e] bg-white">
-                <BadgeCheck className="h-7 w-7 text-[#17151e]" strokeWidth={1.9} />
+            <article className="group relative flex min-h-[190px] items-center justify-center rounded-[48px] border-2 border-[#17151e] bg-white px-8 pb-9 pt-12 text-center shadow-[0_18px_42px_rgba(20,16,32,0.06)] transition-shadow duration-300 ease-out hover:shadow-[0_24px_54px_rgba(92,42,156,0.18)]" key={item}>
+              <span className="absolute left-1/2 top-0 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-[#17151e] bg-white transition-colors duration-300 ease-out group-hover:bg-[#ef4266]">
+                <BadgeCheck className="h-7 w-7 text-[#17151e] transition-colors duration-300 ease-out group-hover:text-white" strokeWidth={1.9} />
               </span>
-              <p className="text-base font-bold leading-7 text-[#17151e] sm:text-lg">{item}</p>
+              <p className="transform-gpu text-base font-bold leading-7 text-[#17151e] transition-transform duration-300 ease-out group-hover:-rotate-1 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 motion-reduce:group-hover:scale-100 sm:text-lg">{item}</p>
             </article>
           ))}
         </div>
@@ -517,8 +519,8 @@ export function BeautySummitLadipage() {
 
       <section className={`${sectionShell} bg-[#fff] text-[#370912]`} id="benefits">
         <div className={sectionHead}>
-          <p className="text-sm font-extrabold uppercase text-[#a46d18]">Số lượng vé giới hạn</p>
-          <h2 className="mt-2 text-[28px] font-black uppercase leading-[1.08] text-[#6a0d1c] sm:text-[40px] lg:text-[52px]">
+          <p className="text-sm font-extrabold uppercase text-[#211D51]">Số lượng vé giới hạn</p>
+          <h2 className="mt-2 text-[28px] font-black uppercase leading-[1.35] bg-[linear-gradient(90deg,#5E2493,#F13550)] bg-clip-text text-transparent sm:text-[40px] lg:text-[52px]">
             Đặt mua vé sớm, giá tốt hơn, ưu đãi nhiều hơn
           </h2>
         </div>
@@ -543,20 +545,20 @@ export function BeautySummitLadipage() {
           Lưu ý quan trọng: mỗi mã vé chỉ được check-in 01 lần duy nhất. Quý khách vui lòng không
           check-in trước thời gian diễn ra sự kiện chính thức để đảm bảo quyền lợi.
         </div>
-        <div className="mx-auto w-full max-w-[1180px] overflow-x-auto shadow-[0_18px_42px_rgba(88,20,17,0.18)]">
-          <table className="w-full min-w-[900px] border-collapse bg-[#fffaf0]">
+        <div className="mx-auto w-full max-w-[1180px] overflow-x-auto">
+          <table className="w-full min-w-[900px] border-collapse bg-[#fff]">
             <thead>
               <tr>
-                <th className="border border-[#752f0c2e] bg-[#7b1222] p-4 text-sm uppercase text-[#ffe4a0]">Quyền lợi</th>
+                <th className="border border-[#752f0c2e] bg-[#5E2493] p-4 text-sm uppercase text-[#fff]">Quyền lợi</th>
                 {["Gold", "Ruby", "VIP", "V.VIP"].map((tier) => (
-                  <th className="border border-[#752f0c2e] bg-[#7b1222] p-4 text-sm uppercase text-[#ffe4a0]" key={tier}>{tier}</th>
+                  <th className="border border-[#752f0c2e] bg-[#5E2493] p-4 text-sm uppercase text-[#fff]" key={tier}>{tier}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {benefitRows.map(([label, gold, ruby, vip, vvip]) => (
                 <tr key={String(label)}>
-                  <td className="border border-[#752f0c2e] p-4 text-sm font-semibold leading-6 text-[#3d1320]">{label}</td>
+                  <td className="border border-[#752f0c2e] p-3 lg:p-4 text-sm font-semibold leading-6 text-[#3d1320]">{label}</td>
                   {[gold, ruby, vip, vvip].map((enabled, index) => (
                     <td className="border border-[#752f0c2e] p-4 text-center text-[28px] font-black text-[#771124]" key={index}>
                       {enabled ? <Check className="mx-auto h-7 w-7" strokeWidth={3} /> : null}
@@ -577,7 +579,7 @@ export function BeautySummitLadipage() {
           <p className="inline-flex rounded-full bg-[#f1e7ff] px-5 py-2 text-sm font-black uppercase tracking-[0.16em] text-[#8b5cf6]">
             Đặc quyền tham dự
           </p>
-          <h2 className="mt-4 text-[26px] font-black uppercase leading-[1.08] text-[#211D51] sm:text-[40px] lg:text-[48px]">
+          <h2 className="mt-4 text-[26px] font-black uppercase leading-[1.35] bg-[linear-gradient(90deg,#5E2493,#F13550)] bg-clip-text text-transparent sm:text-[40px] lg:text-[48px]">
             Quà tặng & trải nghiệm độc quyền vé VIP
           </h2>
         </div>
@@ -594,10 +596,10 @@ export function BeautySummitLadipage() {
       <section className={`${sectionShell} bg-[linear-gradient(180deg,#ffffff_0%,#fff4fb_48%,#f3edff_100%)]`} id="timeline">
         <div className="mx-auto mb-9 max-w-[980px] text-center">
           <p className="inline-flex rounded-full bg-[#f1e7ff] px-5 py-2 text-sm font-black uppercase tracking-[0.16em] text-[#8b5cf6]">
-            Timeline sự kiện
-          </p>
-          <h2 className="mt-4 text-[30px] font-black uppercase leading-[1.05] text-[#211D51] sm:text-[44px] lg:text-[58px]">
             Beauty Summit 2026
+          </p>
+          <h2 className="mt-4 text-[30px] font-black uppercase leading-[1.35] bg-[linear-gradient(90deg,#5E2493,#F13550)] bg-clip-text text-transparent sm:text-[44px] lg:text-[58px]">
+            Timeline sự kiện
           </h2>
           <p className="mx-auto mt-4 max-w-[720px] text-base font-semibold leading-7 text-[#5b5178]">
             Hai ngày trải nghiệm hội thảo, triển lãm, giao lưu đại sứ thương hiệu và kết nối cộng đồng ngành làm đẹp.
@@ -717,7 +719,7 @@ export function BeautySummitLadipage() {
           Quy định vé Beauty Summit
         </h2>
 
-        <div className="relative mx-auto mt-9 max-w-[1480px] rounded-2xl bg-[#ffe4ee] px-6 py-7 text-[#33333b] sm:px-9 lg:px-12 lg:py-9 lg:pb-14">
+        <div className="relative mx-auto mt-9 max-w-[1480px] rounded-2xl bg-[#ffe4ee] px-6 py-7 text-[#33333b] sm:px-9 lg:px-12 lg:py-9 pb-14 lg:pb-14">
           <ul className="space-y-5 text-sm font-bold leading-7 sm:text-base">
             <li className="flex gap-3">
               <ChevronRight className="mt-1 h-5 w-5 shrink-0 text-[#ff5b72]" strokeWidth={3} />
@@ -759,7 +761,7 @@ export function BeautySummitLadipage() {
             </li>
           </ul>
 
-          <div className="absolute -bottom-10 left-1/2 w-[min(450px,90%)] -translate-x-1/2 rounded-2xl bg-white px-6 py-4 text-center text-[26px] font-black uppercase text-[#d10000] shadow-[0_18px_36px_rgba(81,21,91,0.18)] sm:text-[32px]">
+          <div className="absolute -bottom-10 left-1/2 w-[min(450px,90%)] -translate-x-1/2 rounded-2xl bg-white px-6 py-4 text-center text-[24px] font-black uppercase text-[#d10000] shadow-[0_18px_36px_rgba(81,21,91,0.18)] sm:text-[32px]">
             Hotline: 0971.895.886
           </div>
         </div>
@@ -790,13 +792,13 @@ export function BeautySummitLadipage() {
 
           <div className="hidden lg:block" />
 
-          <div className="text-left lg:text-center">
+          <div className="text-center sm:text-left lg:text-center">
             <h3 className="text-base font-black uppercase">Cộng đồng Beauty Summit</h3>
             <p className="mx-auto mt-6 max-w-[420px] text-base font-semibold leading-7">
               Tham gia cộng đồng Beauty Summit để kết nối chuyên sâu với các thương hiệu và chuyên gia uy tín của ngành làm đẹp.
             </p>
             <img
-              className="mt-8 w-[208px] max-w-full bg-white p-1 rounded-[8px] lg:mx-auto"
+              className="mt-8 w-[208px] max-w-full bg-white p-1 rounded-[8px] mx-auto"
               src="/images/qr-zalo-me-zalo-me-g-alkrun710.webp"
               alt="QR cộng đồng Beauty Summit"
             />
@@ -1444,7 +1446,7 @@ function GalleryImage({
 function ScheduleCard({ title, items }: { title: string; items: string[][] }) {
   return (
     <article className="overflow-hidden rounded-[22px] border border-[#eadcff] bg-white text-[#211D51] shadow-[0_20px_55px_rgba(85,51,146,0.12)]">
-      <h3 className="bg-[linear-gradient(90deg,#ef4266,#9b4be4)] px-7 py-5 text-[24px] font-black uppercase text-white">{title}</h3>
+      <h3 className="bg-[linear-gradient(90deg,#4B1C9B,#D7565A)] px-7 py-5 text-[24px] font-black uppercase text-white">{title}</h3>
       <div className="p-7">
       {items.map(([time, text]) => (
         <div className="grid gap-2 border-t border-[#efe5ff] py-4 first:border-t-0 first:pt-0 sm:grid-cols-[132px_1fr] sm:gap-5" key={`${title}-${time}`}>
